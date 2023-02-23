@@ -1,0 +1,24 @@
+@HOST=http://127.0.0.1:8080
+
+
+###
+GET {{HOST}}/api/product
+
+###
+POST {{HOST}}/api/product
+
+{
+    "name": "apple",
+    "price": 10
+}
+
+###
+PUT {{HOST}}/api/product/1
+
+{
+    "name": "apple2",
+    "price": 20
+}
+
+###
+DELETE {{HOST}}/api/product/1
