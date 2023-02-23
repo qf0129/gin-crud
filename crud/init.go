@@ -5,7 +5,7 @@ import (
 )
 
 var db *gorm.DB
-var conf = &Config{}
+var conf = defaultConf
 
 func Init(d *gorm.DB, confs ...*Config) {
 	if d == nil {
@@ -15,16 +15,7 @@ func Init(d *gorm.DB, confs ...*Config) {
 
 	for _, c := range confs {
 		if c != nil {
-			if c.PrimaryKey == "" {
-				conf.PrimaryKey = defaultConf.PrimaryKey
-			}
-			if c.DefaultPageIndex == 0 {
-				conf.DefaultPageIndex = defaultConf.DefaultPageIndex
-			}
-			if c.defaultPageSize == 0 {
-				conf.defaultPageSize = defaultConf.defaultPageSize
-			}
+			conf.Update(c)
 		}
 	}
-
 }

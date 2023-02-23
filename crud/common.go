@@ -2,22 +2,12 @@ package crud
 
 import "gorm.io/gorm"
 
-var defaultConf = &Config{
-	PrimaryKey:       "id",
-	DefaultPageIndex: 1,
-	defaultPageSize:  10,
-}
-
-type Config struct {
-	PrimaryKey       string
-	DefaultPageIndex int
-	defaultPageSize  int
-}
-
 type GormModel any
 
+// 定义查询选项类型
 type QueryOption func(tx *gorm.DB) *gorm.DB
 
+// 固定的查询选项
 type FixedOption struct {
 	ClosePaging bool   `form:"close_paging"` // 关闭分页，默认false
 	Page        int    `form:"page"`         // 页数，默认1

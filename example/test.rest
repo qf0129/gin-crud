@@ -13,6 +13,9 @@ POST {{HOST}}/api/product
 }
 
 ###
+GET {{HOST}}/api/product/1
+
+###
 PUT {{HOST}}/api/product/1
 
 {
