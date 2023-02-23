@@ -10,7 +10,7 @@ func QueryPage[T GormModel](fixed FixedOption, filterOptions []QueryOption) (any
 	var total int64
 	var items []T
 
-	query := DB.Model(new(T))
+	query := db.Model(new(T))
 	for _, option := range filterOptions {
 		query = option(query)
 	}
@@ -31,10 +31,10 @@ func QueryPage[T GormModel](fixed FixedOption, filterOptions []QueryOption) (any
 		}
 	} else {
 		if fixed.Page == 0 {
-			fixed.Page = DEFAULT_PAGE_INDEX
+			fixed.Page = conf.DefaultPageIndex
 		}
 		if fixed.PageSize == 0 {
-			fixed.PageSize = DEFAULT_PAGE_SIZE
+			fixed.PageSize = conf.defaultPageSize
 		}
 		query = OptionWithPage(fixed.Page, fixed.PageSize)(query)
 		ret := query.Find(&items)
@@ -55,7 +55,7 @@ func QueryPage[T GormModel](fixed FixedOption, filterOptions []QueryOption) (any
 func QueryAll[T GormModel](fixed FixedOption, filterOptions []QueryOption) (any, error) {
 	var items []T
 
-	query := DB.Model(new(T))
+	query := db.Model(new(T))
 	for _, option := range filterOptions {
 		query = option(query)
 	}
@@ -76,7 +76,7 @@ func QueryAll[T GormModel](fixed FixedOption, filterOptions []QueryOption) (any,
 
 func QueryOne[T GormModel](modelId any, preload string) (any, error) {
 	var item T
-	query := DB.Model(new(T)).Where(map[string]any{PRIMARY_KEY: modelId})
+	query := db.Model(new(T)).Where(map[string]any{conf.PrimaryKey: modelId})
 	for _, field := range strings.Split(preload, ",") {
 		query = OptionPreload(field)(query)
 	}
@@ -91,18 +91,18 @@ func QueryOne[T GormModel](modelId any, preload string) (any, error) {
 }
 
 func QueryByID[T GormModel](modelId any, result any) error {
-	return DB.Model(new(T)).Where(map[string]any{PRIMARY_KEY: modelId}).Take(&result).Error
+	return db.Model(new(T)).Where(map[string]any{conf.PrimaryKey: modelId}).Take(&result).Error
 }
 
 func CreateOne[T GormModel](obj any) error {
-	return DB.Create(obj).Error
+	return db.Create(obj).Error
 }
 func CreateOneWithMap[T GormModel](obj map[string]any) error {
-	return DB.Model(new(T)).Create(obj).Error
+	return db.Model(new(T)).Create(obj).Error
 }
 
 func UpdateOne[T GormModel](modelId any, params map[string]any) error {
-	return DB.Model(new(T)).Where(map[string]any{PRIMARY_KEY: modelId}).Updates(params).Error
+	return db.Model(new(T)).Where(map[string]any{conf.PrimaryKey: modelId}).Updates(params).Error
 }
 
 func DeleteOne[T GormModel](modelId any) error {
@@ -111,5 +111,5 @@ func DeleteOne[T GormModel](modelId any) error {
 	if err != nil {
 		return err
 	}
-	return DB.Delete(&existModel).Error
+	return db.Delete(&existModel).Error
 }

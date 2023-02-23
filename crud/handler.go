@@ -22,7 +22,7 @@ func CreateOneHandler[T GormModel](parentIdKeys ...string) gin.HandlerFunc {
 				RespFail(c, "CreateOneFailed, "+err.Error())
 				return
 			}
-			RespSuccess(c, &params)
+			RespOk(c, &params)
 		} else {
 			var model T
 			if err := c.ShouldBindJSON(&model); err != nil {
@@ -34,7 +34,7 @@ func CreateOneHandler[T GormModel](parentIdKeys ...string) gin.HandlerFunc {
 				RespFail(c, "CreateOneFailed, "+err.Error())
 				return
 			}
-			RespSuccess(c, &model)
+			RespOk(c, &model)
 		}
 	}
 }
@@ -42,7 +42,7 @@ func CreateOneHandler[T GormModel](parentIdKeys ...string) gin.HandlerFunc {
 func QueryOneHandler[T GormModel](parentIdKey string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ret, _ := QueryOne[T](c.Param(parentIdKey), c.Query(OPTION_PRELOAD))
-		RespSuccess(c, ret)
+		RespOk(c, ret)
 	}
 }
 
@@ -61,7 +61,7 @@ func DeleteOneHandler[T GormModel](parentIdKey string) gin.HandlerFunc {
 				return
 			}
 		}
-		RespSuccess(c, true)
+		RespOk(c, true)
 	}
 }
 
@@ -81,7 +81,7 @@ func UpdateOneHandler[T GormModel](parentIdKey string) gin.HandlerFunc {
 			return
 		}
 
-		delete(parms, PRIMARY_KEY)
+		delete(parms, conf.PrimaryKey)
 		err = UpdateOne[T](c.Param(parentIdKey), parms)
 		if err != nil {
 			RespFail(c, "UpdateOneFailed, "+err.Error())
@@ -90,7 +90,7 @@ func UpdateOneHandler[T GormModel](parentIdKey string) gin.HandlerFunc {
 
 		var newModel T
 		QueryByID[T](c.Param(parentIdKey), &newModel)
-		RespSuccess(c, &newModel)
+		RespOk(c, &newModel)
 	}
 }
 
@@ -125,6 +125,6 @@ func QueryPageHandler[T GormModel](parentIdKeys ...string) gin.HandlerFunc {
 			RespFail(c, "QueryFailed, "+err.Error())
 			return
 		}
-		RespSuccess(c, ret)
+		RespOk(c, ret)
 	}
 }
