@@ -1,4 +1,4 @@
-package pkg
+package crud
 
 import (
 	"gorm.io/gorm"

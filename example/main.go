@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/qf0129/gin-crud/pkg"
+	"github.com/qf0129/gin-crud/crud"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -21,10 +21,10 @@ func main() {
 	}
 	db.AutoMigrate(&Product{})
 
-	pkg.Init(db)
+	crud.Init(db)
 
 	app := gin.Default()
 	group1 := app.Group("/api")
-	pkg.CreateRouter[Product](group1)
+	crud.CreateRouter[Product](group1)
 	app.Run()
 }
