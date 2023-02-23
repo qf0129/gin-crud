@@ -1,8 +1,18 @@
 package crud
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type GormModel any
+
+type BaseModel struct {
+	Id    uint      `gorm:"primaryKey;" json:"id" form:"id"`
+	Ctime time.Time `gorm:"autoCreateTime;comment:'Created Time'" json:"ctime"`
+	Utime time.Time `gorm:"autoUpdateTime;comment:'Updated Time'" json:"utime"`
+}
 
 // 定义查询选项类型
 type QueryOption func(tx *gorm.DB) *gorm.DB
